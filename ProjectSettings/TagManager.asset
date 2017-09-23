@@ -38,6 +38,15 @@ TagManager:
   - 
   - 
   m_SortingLayers:
+  - name: ScrollingBG
+    uniqueID: 2005051765
+    locked: 0
+  - name: Slot
+    uniqueID: 216878549
+    locked: 0
+  - name: Background
+    uniqueID: 221495179
+    locked: 0
   - name: Default
     uniqueID: 0
     locked: 0

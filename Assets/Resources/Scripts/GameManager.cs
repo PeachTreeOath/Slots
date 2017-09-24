@@ -11,6 +11,7 @@ public class GameManager : MonoBehaviour {
 
     private void InitSlotData()
     {
+        SlotManager.instance.Init();
         SlotManager.instance.AddModel(new SlotModel(SlotType.PRACTICE_CHARM));
         SlotManager.instance.AddModel(new SlotModel(SlotType.PRACTICE_CHARM));
         SlotManager.instance.AddModel(new SlotModel(SlotType.PRACTICE_CHARM));
@@ -22,5 +23,6 @@ public class GameManager : MonoBehaviour {
         SlotManager.instance.AddModel(new SlotModel(SlotType.PRACTICE_MUSIC));
         SlotManager.instance.ShuffleModels();
         SlotManager.instance.SpinReels();
+        SlotManager.instance.CreateNewGlobalReel();
     }
 }

@@ -5,6 +5,7 @@ using UnityEngine;
 public class Reel : MonoBehaviour
 {
 
+    public int slotNumber;
     public SlotModel currentSlotModel;
 
     public float spinSpeed;
@@ -19,7 +20,7 @@ public class Reel : MonoBehaviour
     // Use this for initialization
     void Start()
     {
-        yLimit = transform.position.y - slotSprite.bounds.size.y;
+        yLimit = transform.position.y - ResourceLoader.instance.tileSize;
         //totalSlotHeight = CalculateTotalSlotHeight();
 
         singleSlot = GetComponentInChildren<SlotItem>();
@@ -56,6 +57,6 @@ public class Reel : MonoBehaviour
 
     private float CalculateTotalSlotHeight()
     {
-        return slotSprite.bounds.size.y * items.Count;
+        return ResourceLoader.instance.tileSize * items.Count;
     }
 }

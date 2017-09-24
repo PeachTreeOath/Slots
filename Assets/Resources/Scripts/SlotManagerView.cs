@@ -4,21 +4,46 @@ using UnityEngine;
 
 public class SlotManagerView : MonoBehaviour {
 
-    private List<GameObject> slots = new List<GameObject>();
+    private List<SlotItemPreview> slots = new List<SlotItemPreview>();
+    private GameObject newSlotObj;
+    private float slotSize;
 
-    public void CreateNewGlobalReel()
+    public void Init()
+    {
+        newSlotObj = ResourceLoader.instance.GetPrefab("PreviewSlot");
+        slotSize = ResourceLoader.instance.tileSize / 2;
+    }
+
+    public void CreateNewGlobalReel(List<SlotModel> slotItems)
     {
         CleanUpReel();
-
-        List<GameObject> newSlots = new List<GameObject>();
-
+        GenerateReel(slotItems);
     }
 
     private void CleanUpReel()
     {
-        foreach(GameObject slot in slots)
+        foreach (SlotItemPreview slot in slots)
         {
-            Destroy(slot);
+            Destroy(slot.gameObject);
         }
+    }
+
+    private void GenerateReel(List<SlotModel> slotItems)
+    {
+        List<SlotItemPreview> newSlots = new List<SlotItemPreview>();
+        float xPos = transform.position.x;
+        float yPos = transform.position.y;
+
+        foreach (SlotModel item in slotItems)
+        {
+            SlotItemPreview newSlot = Instantiate(newSlotObj).GetComponent<SlotItemPreview>();
+            newSlot.SetModel(item);
+            newSlot.transform.position = new Vector2(xPos, yPos);
+            newSlot.transform.SetParent(transform);
+            newSlots.Add(newSlot);
+            yPos -= slotSize;
+        }
+
+        slots = newSlots;
     }
 }

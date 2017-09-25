@@ -11,7 +11,7 @@ public class ActivityManager : MonoBehaviour
     public void Init()
     {
         // Add all activities here
-        allActivities.Add(new DanceActivity());
+        allActivities.Add(gameObject.AddComponent<DanceBattleActivity>());
 
         view = Instantiate(ResourceLoader.instance.GetPrefab("ActivityManagerView")).GetComponent<ActivityManagerView>();
         view.Init();

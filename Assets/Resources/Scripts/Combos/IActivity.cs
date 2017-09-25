@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using UnityEngine;
 
 public interface IActivity {
 
@@ -8,4 +9,5 @@ public interface IActivity {
 
     bool CalculateActivity(List<Reel> reels);
 
+    void BuildItem(GameObject parent);
 }

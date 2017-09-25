@@ -4,15 +4,15 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 
-public class DanceActivity : IActivity
+public class DanceBattleActivity : AActivity
 {
 
-    public string GetActivityName()
+    public override string GetActivityName()
     {
         return "Dance Battle";
     }
 
-    public bool CalculateRequirements(List<SlotModel> slotItems)
+    public override bool CalculateRequirements(List<SlotModel> slotItems)
     {
         if (!slotItems.Any(r => r.type == SlotType.PRACTICE_DANCE))
         {
@@ -22,7 +22,7 @@ public class DanceActivity : IActivity
         return true;
     }
 
-    public bool CalculateActivity(List<Reel> reels)
+    public override bool CalculateActivity(List<Reel> reels)
     {
         int streak = 0;
         foreach (Reel reel in reels)
@@ -42,4 +42,14 @@ public class DanceActivity : IActivity
         }
         return false;
     }
+
+    public override void BuildItem(GameObject parent)
+    {
+        base.BuildItem(parent);
+
+        AddSlot(SlotType.PRACTICE_DANCE, parent);
+        AddSlot(SlotType.PRACTICE_DANCE, parent);
+        AddSlot(SlotType.PRACTICE_DANCE, parent);
+    }
+
 }

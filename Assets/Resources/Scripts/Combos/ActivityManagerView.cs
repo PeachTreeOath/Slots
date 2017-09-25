@@ -36,6 +36,8 @@ public class ActivityManagerView : MonoBehaviour {
             GameObject obj = Instantiate(ResourceLoader.instance.GetPrefab("ActivityView"));
             ActivityView view = obj.GetComponent<ActivityView>();
             view.activity = activity;
+            view.Init();
+            obj.transform.SetParent(transform);
             blocks.Add(view);
         }
     }

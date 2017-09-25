@@ -8,15 +8,10 @@ public class ActivityView : MonoBehaviour
 
     public IActivity activity;
 
-    // Use this for initialization
-    void Start()
+    // Called after activity is already set
+    public void Init()
     {
         GetComponentInChildren<Text>().text = activity.GetActivityName();
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-
+        activity.BuildItem(transform.Find("Icons").gameObject);
     }
 }

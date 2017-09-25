@@ -9,6 +9,7 @@ public class ReelSwitch : MonoBehaviour {
     private Sprite normalSprite;
     private Sprite hoverSprite;
     private SpriteRenderer spriteRenderer;
+    private int reelNumber;
 
     void Start()
     {
@@ -18,11 +19,15 @@ public class ReelSwitch : MonoBehaviour {
             hoverSprite = ResourceLoader.instance.GetSprite("reelUpHover");
         else
             hoverSprite = ResourceLoader.instance.GetSprite("reelDownHover");
+        reelNumber = transform.GetComponentInParent<Reel>().reelNumber;
     }
 
     void OnMouseDown()
     {
-        Debug.Log("IWJER");
+        if(isDirectionUp)
+            SlotManager.instance.MoveReelUp(reelNumber);
+        else
+            SlotManager.instance.MoveReelDown(reelNumber);
     }
 
     void OnMouseEnter()

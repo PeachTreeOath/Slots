@@ -5,7 +5,7 @@ using UnityEngine;
 public class Reel : MonoBehaviour
 {
 
-    public int slotNumber;
+    public int reelNumber;
     public SlotModel currentSlotModel;
 
     public float spinSpeed;

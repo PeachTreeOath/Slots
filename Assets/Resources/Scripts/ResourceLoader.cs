@@ -21,6 +21,7 @@ public class ResourceLoader : Singleton<ResourceLoader>
     public Sprite prevFri;
 
     public float tileSize;
+    public Vector2 activityTileSize;
 
     private Dictionary<SlotType, Sprite> spriteDict = new Dictionary<SlotType, Sprite>();
 
@@ -35,6 +36,7 @@ public class ResourceLoader : Singleton<ResourceLoader>
         spriteDict.Add(SlotType.PRACTICE_MUSIC, slotMusic);
 
         tileSize = slotCharm.bounds.size.x;
+        activityTileSize = GetSprite("activity").bounds.size;
     }
 
     private void LoadResourceFolders()

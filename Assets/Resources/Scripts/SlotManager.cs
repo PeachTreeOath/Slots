@@ -4,15 +4,23 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 
-public class SlotManager : Singleton<SlotManager> {
+public class SlotManager : Singleton<SlotManager>
+{
 
-    private List<SlotModel> slotItems = new List<SlotModel>();
-    private List<Reel> reels = new List<Reel>();
+    private Dictionary<int, int> reelMap = new Dictionary<int, int>(); // Maps reel number to global reel index
+    private List<SlotModel> slotItems = new List<SlotModel>(); // Global slot list
+    private List<Reel> reels = new List<Reel>(); // Mon-Fri reels
+
     private System.Random rand;
     private SlotManagerView view;
+    private ActivityManager activityManager;
+    private int currId;
 
     public void Init()
     {
+        activityManager = gameObject.AddComponent<ActivityManager>();
+        activityManager.Init();
+
         rand = new System.Random();
         GameObject viewObj = ResourceLoader.instance.GetPrefab("SlotManagerView");
         view = Instantiate(viewObj).GetComponent<SlotManagerView>();
@@ -26,28 +34,101 @@ public class SlotManager : Singleton<SlotManager> {
         reels.Add(GameObject.Find("Reel5").GetComponent<Reel>());
     }
 
+    /// <summary>
+    /// Adds to global list of items
+    /// </summary>
+    /// <param name="slotModel"></param>
     public void AddModel(SlotModel slotModel)
     {
+        slotModel.slotId = currId++;
         slotItems.Add(slotModel);
     }
 
+    /// <summary>
+    /// Shuffles global list of items
+    /// </summary>
     public void ShuffleModels()
     {
         slotItems = slotItems.OrderBy(x => rand.Next()).ToList();
     }
 
+    /// <summary>
+    /// Takes each reel and gives it a random item from global list
+    /// </summary>
     public void SpinReels()
     {
-        foreach(Reel reel in reels)
+        foreach (Reel reel in reels)
         {
             int idx = rand.Next(0, slotItems.Count);
-            reel.SetCurrentSlotModel(slotItems[idx]);
+            SetReelToModel(reel.reelNumber, idx);
         }
+        activityManager.LayoutBlocks(reels);
     }
 
     public void CreateNewGlobalReel()
     {
         ShuffleModels();
         view.CreateNewGlobalReel(slotItems);
+        activityManager.ShowAllAvailableActivities(slotItems);
+    }
+
+    /// <summary>
+    /// Moves up global list and sets images
+    /// </summary>
+    /// <param name="reelNumber"></param>
+    public void MoveReelUp(int reelNumber)
+    {
+        int nextIndex = reelMap[reelNumber];
+        nextIndex--;
+        if (nextIndex < 0)
+        {
+            nextIndex = slotItems.Count - 1;
+        }
+
+        SetReelToModel(reelNumber, nextIndex);
+    }
+
+    /// <summary>
+    /// Moves down global list and sets images
+    /// </summary>
+    /// <param name="reelNumber"></param>
+    public void MoveReelDown(int reelNumber)
+    {
+        int nextIndex = reelMap[reelNumber];
+        nextIndex++;
+        if (nextIndex >= slotItems.Count)
+        {
+            nextIndex = 0;
+        }
+
+        SetReelToModel(reelNumber, nextIndex);
+    }
+
+    /// <summary>
+    /// Sets images tied to selection
+    /// </summary>
+    /// <param name="i"></param>
+    /// <param name="currModel"></param>
+    private void SetReelToModel(int reelNumber, int slotIdx)
+    {
+        SlotModel currModel = slotItems[slotIdx];
+        SlotModel prevModel = null;
+        if (reelMap.ContainsKey(reelNumber))
+        {
+            int prevNum = reelMap[reelNumber];
+            prevModel = slotItems[prevNum];
+        }
+        foreach (Reel reel in reels)
+        {
+            if (reel.reelNumber == reelNumber)
+            {
+                reel.SetCurrentSlotModel(currModel); // Set reel image
+                if(prevModel != null)
+                    view.SetSlotModelDecorations(reel.reelNumber, prevModel, false); // Set preview decorations
+                view.SetSlotModelDecorations(reel.reelNumber, currModel, true); // Set preview decorations
+                reelMap[reel.reelNumber] = slotIdx;
+                break;
+            }
+        }
     }
 }

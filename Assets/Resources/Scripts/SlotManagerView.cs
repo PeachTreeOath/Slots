@@ -46,4 +46,16 @@ public class SlotManagerView : MonoBehaviour {
 
         slots = newSlots;
     }
+
+    public void SetSlotModelDecorations(int reelNum, SlotModel model, bool toggle)
+    {
+        foreach(SlotItemPreview slot in slots)
+        {
+            if(slot.model.slotId == model.slotId)
+            {
+                slot.ToggleSelected(reelNum, toggle);
+                break;
+            }
+        }
+    }
 }
